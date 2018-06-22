@@ -3,19 +3,30 @@
   <head>
     <meta charset="utf-8">
     <title>InvoiceTOP v1.0</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
     <script type="text/javascript" src="js/vendor/angular.js"></script>
     <script src="js/app.js"></script>
     <script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/angularjs-gauge.min.js"></script>
+  <script src="js/vendor/moment.js"></script>
+  <script src="js/vendor/angular-momentjs.min.js"></script> 
+  <script src="js/vendor/Chart.min.js"></script>
+  <script src="js/vendor/angular-chart.min.js"></script>
+  
+
   </head>
  
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
     <div  ng-model="speed">
-      <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Speed"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="mph" thresholds="threshold" fraction-size="1"></ng-gauge>
-      <!--<button type="button" id="button" ng-click="changeValue()" >Click Me!</button>-->
+      <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Speed"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="mph" thresholds="threshold" fraction-size="1"></ng-gauge>     
+    </div>
+    <div>
+        <canvas id="line" class="chart chart-line" chart-data="data"
+chart-labels="labels" chart-series="series" chart-options="options"
+chart-dataset-override="datasetOverride" chart-click="onClick">
+    </canvas>
     </div>
   </body>
 
