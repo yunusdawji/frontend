@@ -25,10 +25,8 @@ app.controller('InvoiceCtrl',function($scope){
   };
   $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
   $scope.options = {
-    scales: {
-      
+    scales: {      
       xAxes: [{
-        type: 'time',
         ticks: {
             autoSkip: true,
             maxTicksLimit: 20
@@ -41,11 +39,14 @@ app.controller('InvoiceCtrl',function($scope){
     },
     elements: {
       line: {
-              fill: false
+              fill: false,
+              borderColor: "#FF5252"
               
       },
-      point: { radius: 0 } 
-  }
+      point: { 
+        radius: 0 
+      } 
+    }
   };
 
   // at start set the invoice to an empty one

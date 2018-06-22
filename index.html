@@ -20,7 +20,7 @@
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
     <div  ng-model="speed">
-      <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Speed"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="mph" thresholds="threshold" fraction-size="1"></ng-gauge>     
+      <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Hz" thresholds="threshold" fraction-size="1"></ng-gauge>     
     </div>
     <div>
         <canvas id="line" class="chart chart-line" chart-data="data"
