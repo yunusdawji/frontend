@@ -40,30 +40,7 @@ function setupEmailing(){
 
 }
 
-function sendEmail(options){
-        const pdfPath = path.join(os.tmpdir(), 'print.pdf')
-        var options = options || {};
-        options.from = options.from || "support@techiediaries.com";
-        transport.sendMail({
-          from: options.from,
-          to: options.to,
-          subject: options.subject,
-          html: '',
-          text: options.text,  
-          attachments: [{
-              filename: 'invoice.pdf',
-              path: pdfPath,
-              contentType: 'application/pdf'
-          }]
-        }, function(err, responseStatus) {
-          console.log('email sent ');
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(responseStatus.message);
-          }
-        });  
-}
+
 
 
 
