@@ -4,7 +4,11 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "pack": "build --dir",
+    "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/windows/icon.ico --prune=true --out=release-builds --version-string.CompanyName='CE' --version-string.FileDescription='Electron tutorial app' --version-string.ProductName='Electron tutorial app'",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
   },
   "repository": {
     "type": "git",
@@ -16,6 +20,33 @@
     "start",
     "tutorial"
   ],
+  "build": {
+    "appId": "yourappid",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
+  },
   "author": "GitHub",
   "license": "CC0-1.0",
   "bugs": {
@@ -23,6 +54,8 @@
   },
   "homepage": "https://github.com/electron/electron-quick-start#readme",
   "devDependencies": {
+    "electron-builder": "^20.15.1",
+    "electron-packager": "^12.1.0",
     "electron-prebuilt": "^1.2.0",
     "nodemailer": "^2.4.2"
   },
@@ -31,7 +64,7 @@
     "angular-chart.js": "^1.1.1",
     "angular-momentjs": "^0.2.2",
     "angularjs-gauge": "^2.2.0",
-    "electron-packager": "^7.1.0",
+    "asar": "^0.14.3",
     "electron-packager-interactive": "0.0.7"
   }
 }

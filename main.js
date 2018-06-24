@@ -2,8 +2,8 @@ const electron = require('electron')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
-const nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
+//const nodemailer = require('nodemailer');
+//var smtpTransport = require('nodemailer-smtp-transport');
 const ipc = electron.ipcMain
 const shell = electron.shell
 
@@ -20,7 +20,7 @@ let viewerWindow
 let menu;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-
+/*
 function setupEmailing(){
     transport = nodemailer.createTransport({
       service: 'gmail',
@@ -38,7 +38,7 @@ function setupEmailing(){
    }
   }));  */
 
-}
+//}
 
 
 
