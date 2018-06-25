@@ -58,9 +58,15 @@ app.controller('InvoiceCtrl',function($scope){
 	$scope.editMode = true;
 	$scope.printMode = false;
   const { spawn } = require('child_process');
-  console.log(path.join(__dirname,'../binary/SeqGen'));
+  
   var binarypath = '';
   var inputraw = '';
+
+  // Debug architecture testing stuff
+  var os = require('os');
+  var is64Bit = os.arch() === 'x64' || process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432');
+  console.log(is64Bit ? 64 : 32);
+
 
   var osvar = process.platform;
 
@@ -77,6 +83,7 @@ app.controller('InvoiceCtrl',function($scope){
     console.log("you are on a windows os")
   }else{
   }
+  console.log(binarypath);
   const seqgen = spawn(binarypath, ["-s", "l", "-m",inputraw]);
     
   seqgen.stdout.on('data', (data) => {
