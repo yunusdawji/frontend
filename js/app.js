@@ -1,7 +1,9 @@
 const path = require('path')
 
 var app = angular.module('invoiceapp',['angularjs-gauge',"chart.js"]);
-
+function isDev() {
+  return process.mainModule.filename.indexOf('app.asar') === -1;
+}
 app.config(['ChartJsProvider', function (ChartJsProvider) {
   // Configure all charts
   ChartJsProvider.setOptions({
@@ -57,7 +59,25 @@ app.controller('InvoiceCtrl',function($scope){
 	$scope.printMode = false;
   const { spawn } = require('child_process');
   console.log(path.join(__dirname,'../binary/SeqGen'));
-  const seqgen = spawn(path.join(__dirname,'../binary/SeqGen'), ["-s", "l", "-m",path.join(__dirname, '../binary/raw')]);
+  var binarypath = '';
+  var inputraw = '';
+
+  var osvar = process.platform;
+
+  if (osvar == 'darwin') {
+    if(isDev()){
+      binarypath = path.join(__dirname,'binary/SeqGen');
+      console.log("Mac OS Dev");
+      inputraw = path.join(__dirname, 'binary/raw');
+    }else{
+      binarypath = path.join(__dirname,'../binary/SeqGen');
+      inputraw = path.join(__dirname, '../binary/raw');
+    }
+  }else if(osvar == 'win32'){
+    console.log("you are on a windows os")
+  }else{
+  }
+  const seqgen = spawn(binarypath, ["-s", "l", "-m",inputraw]);
     
   seqgen.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);

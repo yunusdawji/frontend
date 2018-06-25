@@ -21,14 +21,15 @@
     "start",
     "tutorial"
   ],
- 
   "build": {
     "appId": "org.zulip.zulip-electron",
     "asar": true,
     "files": [
       "**/*"
     ],
-    "extraResources": ["binary"],
+    "extraResources": [
+      "binary"
+    ],
     "dmg": {
       "contents": [
         {
