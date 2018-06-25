@@ -1,6 +1,6 @@
 const path = require('path')
 
-var app = angular.module('invoiceapp',['angularjs-gauge',"chart.js"]);
+var app = angular.module('invoiceapp',['angularjs-gauge',"chart.js",'angularUserSettings']);
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 }
@@ -16,47 +16,20 @@ app.config(['ChartJsProvider', function (ChartJsProvider) {
   });
 }]);
 
-app.controller('InvoiceCtrl',function($scope){
+app.controller('InvoiceCtrl',function($scope,$userSettings){
   
   
   $scope.labels = [];
   $scope.series = ['Series A'];
   $scope.data = [
   ];
+  
+  $scope.program = $userSettings.get('program');
   var count = 0;
   $scope.onClick = function (points, evt) {
-    console.log(points, evt);
-  };
-  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
-  $scope.options = {
-    scales: {      
-      xAxes: [{
-        ticks: {
-            autoSkip: true,
-            maxTicksLimit: 20
-        }
-    }]
-    },
-    animation: {
-      x : true,
-      duration: 0
-    },
-    elements: {
-      line: {
-              fill: false,
-              borderColor: "#FF5252"
-              
-      },
-      point: { 
-        radius: 0 
-      } 
-    }
-  };
+  console.log(points, evt);
+  $userSettings.set('program', $scope.program);
 
-  // at start set the invoice to an empty one
-  $scope.speed = 10.0;
-	$scope.editMode = true;
-	$scope.printMode = false;
   const { spawn } = require('child_process');
   
   var binarypath = '';
@@ -84,7 +57,9 @@ app.controller('InvoiceCtrl',function($scope){
   }else{
   }
   console.log(binarypath);
-  const seqgen = spawn(binarypath, ["-s", "l", "-m",inputraw]);
+  var programm = $scope.program.split(' ');
+  var file = programm.shift();
+  const seqgen = spawn(file,programm);
     
   seqgen.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
@@ -118,6 +93,42 @@ app.controller('InvoiceCtrl',function($scope){
   seqgen.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
   });
+  };
+  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+
+
+
+
+  $scope.options = {
+    scales: {      
+      xAxes: [{
+        ticks: {
+            autoSkip: true,
+            maxTicksLimit: 20
+        }
+    }]
+    },
+    animation: {
+      x : true,
+      duration: 0
+    },
+    elements: {
+      line: {
+              fill: false,
+              borderColor: "#FF5252"
+              
+      },
+      point: { 
+        radius: 0 
+      } 
+    }
+  };
+
+  // at start set the invoice to an empty one
+  $scope.speed = 10.0;
+	$scope.editMode = true;
+	$scope.printMode = false;
+  
 
   $scope.color = "#ff0000";
   $scope.changeValue = function() {

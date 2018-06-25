@@ -13,12 +13,19 @@
   <script src="js/vendor/angular-momentjs.min.js"></script> 
   <script src="js/vendor/Chart.min.js"></script>
   <script src="js/vendor/angular-chart.min.js"></script>
-  
+  <script src="js/vendor/angular-user-settings.min.js"></script>
+
 
   </head>
  
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
+    <div>
+      Seq Gen:
+      <input type="text" name="seqgen" ng-model="program" style='width:500px;' required>  
+      <button ng-click="onClick()" >Run</button>
+    </div>
+    
     <div  ng-model="speed">
       <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Hz" thresholds="threshold" fraction-size="1"></ng-gauge>     
     </div>
