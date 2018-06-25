@@ -1,3 +1,5 @@
+const path = require('path')
+
 var app = angular.module('invoiceapp',['angularjs-gauge',"chart.js"]);
 
 app.config(['ChartJsProvider', function (ChartJsProvider) {
@@ -54,7 +56,8 @@ app.controller('InvoiceCtrl',function($scope){
 	$scope.editMode = true;
 	$scope.printMode = false;
   const { spawn } = require('child_process');
-  const seqgen = spawn('/Users/yunusdawji/electron/seqgen/build/genqode/Debug/SeqGen', ["-s", "l", "-m", "/Users/yunusdawji/electron/seqgen/data/raw"]);
+  console.log(path.join(__dirname,'../binary/SeqGen'));
+  const seqgen = spawn(path.join(__dirname,'../binary/SeqGen'), ["-s", "l", "-m",path.join(__dirname, '../binary/raw')]);
     
   seqgen.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
