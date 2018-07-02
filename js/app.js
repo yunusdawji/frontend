@@ -62,12 +62,13 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   const seqgen = spawn(file,programm);
     
   seqgen.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+    console.log(`stderr ${data}`);
   });
   
   seqgen.stderr.on('data', (data) => {  
+    console.log(`stdout ${data}`);
     // see if the data line
-    if(data.includes("iseq.cpp:165")){
+    if(data.includes("The CPU basecaller's instantenous speed for file")){
       // split the string and get the value
       var splitdata = data.toString().split(' ');
       var value = splitdata[splitdata.length-2];
