@@ -1,3 +1,9 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600);@import url(https://fonts.googleapis.com/css?family=Fira+Mono);
+
+* {
+	box-sizing: border-box;
+}
+
 body {
 
 	 height: 11in; 
@@ -7,13 +13,14 @@ body {
 	 margin-top: 5px;
 	 margin-left: 5px;
 
-	 padding: 0.5in; 
-	 width: 8.5in; 
 
-	 border-radius: 1px; 
-	 
-	 box-shadow: 0 0 4in -0.25in rgba(1, 0, 255, 0.3);
 }
+
+.guage_header {
+	text-align: center;
+}
+
+/*
 .btn
 {
 	border-width: 1px;
@@ -33,6 +40,7 @@ body {
 	cursor: pointer;
 	font-weight: bold;
 	text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
+	font-family: 'Source Sans Pro', 'Lucida Grande', sans-serif;
 
 }
 
@@ -44,7 +52,7 @@ body {
 
 
 /* content editable */
-
+/*
 #editable {
 
 	border-radius: 1px; 
@@ -77,7 +85,7 @@ th {  border:1px solid #00f; }
 
 
 /* header */
-
+/*
 #header { margin: 0 0 3em; }
 #header:after { clear: both; content: ""; display: table; }
 
@@ -98,7 +106,7 @@ th {  border:1px solid #00f; }
 #middle address { float: left; font-size: 125%; font-weight: bold; }
 
 /* table meta & balance */
-
+/*
 table.meta, table.balance { float: right; width: 36%; }
 table.meta:after, table.balance:after { clear: both; content: ""; display: table; }
 
@@ -110,3 +118,4 @@ table.meta:after, table.balance:after { clear: both; content: ""; display: table
 	span:empty { display: none; }
 	.btn-add, .btn-remove { display: none; }
 }
+*/

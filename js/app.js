@@ -20,12 +20,39 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   
   
   $scope.labels = [];
-  $scope.series = ['Series A'];
+  $scope.series = ['CPU', 'FPGA'];
+ 
   $scope.data = [
+    [0],
+    [0]
   ];
   
+
+  $scope.datasetOverride1 = [
+    {
+      //label: 'Override Series A',
+      borderWidth: 3,
+      borderColor: 'rgba(255,0,0,1)',
+      backgroundColor: 'rgba(255,0,0,1)',
+
+      type: 'line'
+    },
+    {
+     // label: 'Override Series B',
+      borderWidth: 3,
+      borderColor: 'rgba(0,0,255,1)',
+      backgroundColor: 'rgba(0,0,255,1)',
+     // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      //hoverBorderColor: 'rgba(255,99,132,1)',
+      type: 'line'
+    }
+    
+    
+  ];
+
   $scope.program = $userSettings.get('program');
   var count = 0;
+  var count1 = 0;
   $scope.onClick = function (points, evt) {
   console.log(points, evt);
   $userSettings.set('program', $scope.program);
@@ -62,28 +89,28 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   const seqgen = spawn(file,programm);
     
   seqgen.stdout.on('data', (data) => {
-    console.log(`stderr ${data}`);
+   // console.log(`stderr ${data}`);
   });
   
   seqgen.stderr.on('data', (data) => {  
-    console.log(`stdout ${data}`);
+    //console.log(`stdout ${data}`);
     // see if the data line
     if(data.includes("The CPU basecaller's instantenous speed for file")){
       // split the string and get the value
       var splitdata = data.toString().split(' ');
       var value = splitdata[splitdata.length-2];
-      console.log(`stderr: ${value}`);
+      //console.log(`stderr: ${value}`);
       $scope.speed = value;
       if(count < 100){
         $scope.labels.push(count);
-        $scope.data.push(value);
+        $scope.data[0].push(value);
         
         count++;
       }else{
         $scope.labels.shift();        
         $scope.labels.push(count);
-        $scope.data.shift();
-        $scope.data.push(value);
+        $scope.data[0].shift();
+        $scope.data[0].push(value);
         count++;
       }
       $scope.changeValue();
@@ -94,6 +121,44 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   seqgen.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
   });
+
+  const fpgaprogram = spawn(file,programm);
+
+  fpgaprogram.stdout.on('data', (data) => {
+   // console.log(`stderr ${data}`);
+  });
+  
+  fpgaprogram.stderr.on('data', (data) => {  
+   // console.log(`stdout ${data}`);
+    // see if the data line
+    if(data.includes("The CPU basecaller's instantenous speed for file")){
+      // split the string and get the value
+      var splitdata = data.toString().split(' ');
+      var value = splitdata[splitdata.length-2];
+      //console.log(`stderr: ${value}`);
+      $scope.speed_fpga = value*4;
+      if(count1 < 100){
+        //$scope.labels.push(count);
+        //$scope.data.push(value);
+        $scope.data[1].push(value*4);
+       
+        count1++;
+      }else{
+        //$scope.labels.shift();        
+        //$scope.labels.push(count);
+        $scope.data[1].shift();
+        $scope.data[1].push(value*4);
+        count1++;
+      }
+      $scope.changeValue();
+      $scope.$apply();
+    }
+  });
+  
+  fpgaprogram.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+
   };
   $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
 
@@ -101,12 +166,42 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
 
 
   $scope.options = {
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'My First dataset',
+        //backgroundColor: window.chartColors.red,
+        //borderColor: window.chartColors.red,
+        data: [
+         
+        ],
+        fill: false,
+      }, {
+        label: 'My Second dataset',
+        fill: false,
+        //backgroundColor: window.chartColors.blue,
+        //borderColor: window.chartColors.blue,
+        data: [
+        ],
+      }]
+    },
     scales: {      
       xAxes: [{
         ticks: {
             autoSkip: true,
-            maxTicksLimit: 20
+            maxTicksLimit: 20,
+            
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'File Index'
         }
+    }],
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'Basecalling Speed (kb/sec)'
+      }
     }]
     },
     animation: {
@@ -122,14 +217,34 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
       point: { 
         radius: 0 
       } 
-    }
+    },
+    legend: {
+      display: true,
+      labels: {
+          //fontColor: 'rgb(255, 99, 132)'
+      },
+      position : 'top'
+    },
+    color: [
+      'red',    // color for data at index 0
+      'blue'
+    ]
   };
 
   // at start set the invoice to an empty one
   $scope.speed = 10.0;
 	$scope.editMode = true;
 	$scope.printMode = false;
-  
+
+  $scope.speed_fpga = 0.0;
+  $scope.scales= {
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'probability'
+      }
+    }]
+  };
 
   $scope.color = "#ff0000";
   $scope.changeValue = function() {
