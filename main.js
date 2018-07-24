@@ -255,10 +255,11 @@ function createWindow () {
   var startTime = Date.now();
   mainWindow = new BrowserWindow({
     frame: true,
-    resizable: false,
+    resizable: true,
     width: 860,
     height: 600,
     show:false,
+    fullscreen:true
   });
   // menu = Menu.buildFromTemplate(template)
    // Menu.setApplicationMenu(menu)
@@ -280,6 +281,9 @@ function createWindow () {
       console.error(Date.now() - startTime);  
     }, 40);
   });
+
+  mainWindow.maximize();
+  //mainWindow.show();
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools()
