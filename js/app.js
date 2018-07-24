@@ -234,12 +234,12 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
       'red',    // color for data at index 0
       'blue'
     ],
-    width:500,
+    width:600,
     height:300
   };
 
   // at start set the invoice to an empty one
-  $scope.speed = 10.0;
+  $scope.speed = 0.0;
 	$scope.editMode = true;
 	$scope.printMode = false;
 
