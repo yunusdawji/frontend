@@ -20,9 +20,11 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   
   
   $scope.labels = [];
-  $scope.series = ['CPU', 'FPGA'];
+  $scope.series = ['CPU', 'CPU Average', 'FPGA', 'FPGA Average'];
  
   $scope.data = [
+    [0],
+    [0],
     [0],
     [0]
   ];
@@ -31,17 +33,34 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   $scope.datasetOverride1 = [
     {
       //label: 'Override Series A',
-      borderWidth: 3,
+      borderWidth: 1,
       borderColor: 'rgba(255,0,0,1)',
       backgroundColor: 'rgba(255,0,0,1)',
 
       type: 'line'
     },
     {
-     // label: 'Override Series B',
+      //label: 'Override Series A',
       borderWidth: 3,
+      borderColor: 'rgba(255,130,0,1)',
+      backgroundColor: 'rgba(255,130,0,1)',
+
+      type: 'line'
+    },
+    {
+     // label: 'Override Series B',
+      borderWidth: 1,
       borderColor: 'rgba(0,0,255,1)',
       backgroundColor: 'rgba(0,0,255,1)',
+     // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      //hoverBorderColor: 'rgba(255,99,132,1)',
+      type: 'line'
+    },
+    {
+     // label: 'Override Series B',
+      borderWidth: 3,
+      borderColor: 'rgba(130,0,255,1)',
+      backgroundColor: 'rgba(130,0,255,1)',
      // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       //hoverBorderColor: 'rgba(255,99,132,1)',
       type: 'line'
@@ -53,6 +72,8 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   $scope.program = $userSettings.get('program');
   var count = 0;
   var count1 = 0;
+  var cpuaverage = 0;
+  var fpgaaverage = 0;
   $scope.onClickSave = function (points, evt) {
     console.log(points, evt);
     $userSettings.set('program', $scope.program);
@@ -88,6 +109,7 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   }else{
   }
   console.log(binarypath);
+
   var programm = $scope.program.split(' ');
   var file = programm.shift();
   const seqgen = spawn(file,programm);
@@ -103,18 +125,24 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
       // split the string and get the value
       var splitdata = data.toString().split(' ');
       var value = splitdata[splitdata.length-2];
-      //console.log(`stderr: ${value}`);
       $scope.speed = value;
+      var cpuaveragetemp = ((cpuaverage*count)+parseFloat(value))/(count + 1);
+      cpuaverage = cpuaveragetemp;  
+      console.log(`stderr: ${cpuaverage} ${value}`);
+      
       if(count < 100){
         $scope.labels.push(count);
-        $scope.data[0].push(value);
-        
+        $scope.data[0].push(parseInt(value));
+        $scope.data[1].push(cpuaveragetemp);        
         count++;
       }else{
         $scope.labels.shift();        
         $scope.labels.push(count);
         $scope.data[0].shift();
         $scope.data[0].push(value);
+        
+        $scope.data[1].shift();
+        $scope.data[1].push(cpuaveragetemp);        
         count++;
       }
       $scope.changeValue();
@@ -139,19 +167,27 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
       // split the string and get the value
       var splitdata = data.toString().split(' ');
       var value = splitdata[splitdata.length-2];
+      fpgaaverage = ((fpgaaverage*count1)+parseFloat(value))/(count1 + 1);
+
       //console.log(`stderr: ${value}`);
       $scope.speed_fpga = value*4;
       if(count1 < 100){
         //$scope.labels.push(count);
         //$scope.data.push(value);
-        $scope.data[1].push(value*4);
+        $scope.data[2].push(value*4);
+        $scope.data[3].push(fpgaaverage*4);
        
         count1++;
       }else{
         //$scope.labels.shift();        
         //$scope.labels.push(count);
-        $scope.data[1].shift();
-        $scope.data[1].push(value*4);
+        $scope.data[2].shift();
+        $scope.data[2].push(value*4);
+        
+        $scope.data[3].shift();
+        $scope.data[3].push(fpgaaverage*4);
+
+
         count1++;
       }
       $scope.changeValue();

@@ -282,7 +282,7 @@ function createWindow () {
     fullscreen:true
   });
   menu = Menu.buildFromTemplate(menuTemplate)
-   Menu.setApplicationMenu(menu)
+   //Menu.setApplicationMenu(menu)
   //setupEmailing();
   /*ipc.on('start-invoicing', function (event) {
     menu.items[2].submenu.items[0].enabled = true;
