@@ -53,9 +53,13 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   $scope.program = $userSettings.get('program');
   var count = 0;
   var count1 = 0;
+  $scope.onClickSave = function (points, evt) {
+    console.log(points, evt);
+    $userSettings.set('program', $scope.program);
+  };
   $scope.onClick = function (points, evt) {
   console.log(points, evt);
-  $userSettings.set('program', $scope.program);
+  //$userSettings.set('program', $scope.program);
 
   const { spawn } = require('child_process');
   
@@ -166,6 +170,7 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
 
 
   $scope.options = {
+    responsive: false,
     data: {
       labels: [],
       datasets: [{
@@ -228,7 +233,9 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
     color: [
       'red',    // color for data at index 0
       'blue'
-    ]
+    ],
+    width:500,
+    height:300
   };
 
   // at start set the invoice to an empty one

@@ -50,8 +50,9 @@ function createViewerWindow () {
   viewerWindow = new BrowserWindow({
     frame: true,
     resizable: true,
-    width: 900,
-    height: 600
+    width: 1000,
+    height: 200,
+    fullscreen: false
   });
 
   // and load the index.html of the app.
@@ -250,19 +251,38 @@ function openDlg(){
   })
 }
 
+const menuTemplate = [
+  {
+      label: 'Setting',
+      submenu: [
+          {
+              label: 'Binary Settings',
+              click: () => {
+                createViewerWindow ();
+              }
+          }, {
+              type: 'separator'
+          }, {
+              label: 'Quit',
+              click: () => {
+                  app.quit();
+              }
+          }
+      ]
+  }
+];
+
 function createWindow () {
   // Create the browser window.
   var startTime = Date.now();
   mainWindow = new BrowserWindow({
     frame: true,
     resizable: true,
-    width: 860,
-    height: 600,
     show:false,
     fullscreen:true
   });
-  // menu = Menu.buildFromTemplate(template)
-   // Menu.setApplicationMenu(menu)
+  menu = Menu.buildFromTemplate(menuTemplate)
+   Menu.setApplicationMenu(menu)
   //setupEmailing();
   /*ipc.on('start-invoicing', function (event) {
     menu.items[2].submenu.items[0].enabled = true;

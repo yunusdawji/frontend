@@ -24,11 +24,7 @@
  
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
-    <div>
-      Seq Gen:
-      <input type="text" name="seqgen" ng-model="program" style='width:500px;' required>  
-      <button ng-click="onClick()" >Run</button>
-    </div>
+     
     <div class="container">
 
     <div class="row guage_header">
@@ -43,12 +39,19 @@
            <ng-gauge id="speedmeter_fpga" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed_fpga  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Ke/sec" thresholds="threshold" fraction-size="1"></ng-gauge>    
       </div>
     </div>
-    <div>
-        <canvas id="line" class="chart chart-line" chart-data="data"
+    <div  class="row chart">
+        <canvas width="800" height="400" id="line" class="chart chart-line" chart-data="data"
 chart-labels="labels" chart-series="series" chart-options="options"
 chart-dataset-override="datasetOverride1" chart-click="onClick">
     </canvas>
     </div>
+    <div class="row runbutton">
+      <!-- Seq Gen:
+       <input type="text" name="seqgen" ng-model="program" style='width:500px;' required>  
+      -->
+      <span> <button ng-click="onClick()" >Run</button>
+      </span>
+     </div> 
     </div>
   </body>
 

@@ -18,8 +18,23 @@ body {
 
 .guage_header {
 	text-align: center;
+	margin-left: 50px;
+	margin-right: 30px;
 }
 
+.runbutton {
+	width: 100%;
+    
+	text-align: center;
+	margin-top: 20px;
+	margin-left: 30px;
+}
+
+.chart {
+	width: 100%;
+    margin: auto;
+	margin-top: 20px;
+}
 /*
 .btn
 {
