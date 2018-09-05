@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>InvoiceTOP v1.0</title>
+    <title>DNA Basecaller</title>
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
     <script type="text/javascript" src="js/vendor/angular.js"></script>
@@ -34,12 +34,15 @@
       <div  ng-model="speed" class="col-xs-6">
           <h2>
             <span class="package__name___dAyWc truncate flex-auto" title="pretty">CPU Speed</span></h2>
-        <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Ke/sec" thresholds="threshold" fraction-size="1"></ng-gauge>     
+        <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Kb/sec" thresholds="threshold" fraction-size="1"></ng-gauge>     
+<div ng-model="cputotal"><h4>Total Ecoli DNA: {{cputotal}}</h4></div>
+
       </div>
       <div  ng-model="speed_fpga" class="col-xs-6">
           <h2>
             <span class="package__name___dAyWc truncate flex-auto" title="pretty">FPGA Speed</span></h2>
-           <ng-gauge id="speedmeter_fpga" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed_fpga  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Ke/sec" thresholds="threshold" fraction-size="1"></ng-gauge>    
+           <ng-gauge id="speedmeter_fpga" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed_fpga  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Kb/sec" thresholds="threshold" fraction-size="1"></ng-gauge> 
+<div ng-model="fpgatotal"><h4>Total EColi DNA: {{fpgatotal}}</h4></div>   
       </div>
     </div>
     <div  class="row chart">
@@ -52,7 +55,7 @@ chart-dataset-override="datasetOverride1" chart-click="onClick">
       <!-- Seq Gen:
        <input type="text" name="seqgen" ng-model="program" style='width:500px;' required>  
       -->
-      <span> <button ng-click="onClick()" >Run</button>
+      <span> <button ng-click="onClick1()" >Run</button>
       </span>
      </div> 
     </div>

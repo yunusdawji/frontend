@@ -17,7 +17,8 @@ app.config(['ChartJsProvider', function (ChartJsProvider) {
 }]);
 
 app.controller('InvoiceCtrl',function($scope,$userSettings){
-  
+  $scope.cputotal = 0;
+  $scope.fpgatotal = 0;
   
   $scope.labels = [];
   $scope.series = ['CPU', 'CPU Average', 'FPGA', 'FPGA Average'];
@@ -71,20 +72,169 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
 
   $scope.program = $userSettings.get('program');
   $scope.programfpga = $userSettings.get('programfpga');
-  var count = 0;
-  var count1 = 0;
+
+  var count = 1;
+  var count1 = 1;
   var cpuaverage = 0;
   var fpgaaverage = 0;
+  var cputotal1 = 0;
+  var fpgatotal1 = 0;
   $scope.onClickSave = function (points, evt) {
     console.log(points, evt);
     $userSettings.set('program', $scope.program);
     $userSettings.set('programfpga', $scope.programfpga);
   };
-  $scope.onClick = function (points, evt) {
+
+  const { spawn } = require('child_process');
+
+	const hrtime = new Date().getTime();
+
+
+  function seqgenfunc(){
+      var programm = $scope.program.split(' ');
+      var file = programm.shift();
+      var seqgen = spawn(file,programm);
+
+	seqgen.stdout.on('data', (data) => {
+	// console.log(`stderr ${data}`);
+	});
+
+	seqgen.stderr.on('data', (data) => {  
+		//console.log(`stdout ${data}`);
+		// see if the data line
+		if(data.includes("The CPU basecaller's instantenous speed for file")){
+			// split the string and get the value
+			var splitdata = data.toString().split(' ');
+			var value = splitdata[splitdata.length-2];
+			$scope.speed = value;
+			var crtime = new Date().getTime();
+			
+			var cpuaveragetemp = ((cpuaverage*count)+parseFloat(value))/(count + 1);
+			if(!isNaN(cpuaveragetemp)){			
+				cpuaverage = cpuaveragetemp;  
+				cputotal1 = (cpuaverage)*(crtime - hrtime)/(5.44*Math.pow(10,9));
+				//console.log(((cpuaverage)*(crtime - hrtime)))
+				$scope.cputotal = cputotal1.toFixed(6);
+			}
+			//console.log(`stderr: ${cpuaverage} ${value}`);
+
+			if(count < 100){
+				$scope.labels.push(count);
+				$scope.data[0].push(parseInt(value));
+				$scope.data[1].push(cpuaveragetemp);        
+				count++;
+			}else{
+				if(!isNaN(cpuaveragetemp)){
+				$scope.labels.shift();        
+				$scope.labels.push(count);
+				$scope.data[0].shift();
+				$scope.data[0].push(value);
+
+				$scope.data[1].shift();
+				$scope.data[1].push(cpuaveragetemp);        
+				count++;
+				}
+				console.log(cpuaveragetemp);
+
+			}
+			//$scope.changeValue();
+			$scope.$apply();
+		}
+	});
+
+	seqgen.on('close', (code) => {
+		console.log(`child process exited with code ${code}`);
+		seqgenfunc();
+	});
+  }
+
+  function fpgaseqfunc(){
+var programmfpga = $scope.programfpga.split(' ');
+  var filefpga = programmfpga.shift();
+  var inputfilesdir = programmfpga.shift();
+  programmfpga.push("1");
+  programmfpga.push("0");
+  console.log(filefpga);  
+  const fpgaprogramreset = spawn(filefpga,programmfpga); 
+  
+
+  
+    fpgaprogramreset.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+
+    var programmfpga1 = $scope.programfpga.split(' ');
+    console.log(programmfpga1);
+    programmfpga1.shift();
+    var inptfiledir = programmfpga1.shift();
+    //2 0 0 512
+    programmfpga1.push("2");
+    programmfpga1.push("0");
+    programmfpga1.push("0");
+    programmfpga1.push("512");
+    programmfpga1.push(inptfiledir);
+    console.log(filefpga);
+    console.log(programmfpga1);
+    const fpgaprogram = spawn(filefpga,programmfpga1); 
+  
+    fpgaprogram.stdout.on('data', (data) => {
+      // console.log(`stderr ${data}`);
+     });
+     
+     fpgaprogram.stderr.on('data', (data) => {  
+      // console.log(`stdout ${data}`);
+       // see if the data line
+       if(data.includes("The FPGA basecaller's instantenous speed for file")){
+         // split the string and get the value
+         var splitdata = data.toString().split(' ');
+         var value = splitdata[splitdata.length-2];
+	 var crtime = new Date().getTime();
+	 if(!isNaN(fpgaaverage)){			
+		fpgaaverage = ((fpgaaverage*count1)+parseFloat(value))/(count1 + 1); 
+		fpgatotal1 = (fpgaaverage)*(crtime - hrtime)/(5.44*Math.pow(10,9));
+		$scope.fpgatotal = fpgatotal1.toFixed(6);
+   
+	 }   
+	
+         //console.log(`stderr: ${value}`);
+         $scope.speed_fpga = value;
+         if(count1 < 100){
+           //$scope.labels.push(count);
+           //$scope.data.push(value);
+           $scope.data[2].push(parseFloat(value));
+           $scope.data[3].push(fpgaaverage*1);
+          
+           count1++;
+         }else{
+		 if(!isNaN(fpgaaverage)){			
+		  
+		 //$scope.labels.shift();        
+		   //$scope.labels.push(count);
+		   $scope.data[2].shift();
+		   $scope.data[2].push(parseFloat(value));
+		   
+		   $scope.data[3].shift();
+		   $scope.data[3].push(fpgaaverage*1);
+	   
+	   
+		   count1++;
+		}
+         }
+         $scope.changeValue();
+         $scope.$apply();
+       }
+     });
+     
+     fpgaprogram.on('close', (code) => {
+       console.log(`child process exited with code ${code}`);
+	fpgaseqfunc();
+     });
+  });	
+  }
+
+  $scope.onClick1 = function (points, evt) {
   console.log(points, evt);
   //$userSettings.set('program', $scope.program);
 
-  const { spawn } = require('child_process');
   
   var binarypath = '';
   var inputraw = '';
@@ -112,114 +262,10 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
   }
   console.log(binarypath);
 
-  var programm = $scope.program.split(' ');
-  var file = programm.shift();
-  const seqgen = spawn(file,programm);
+  seqgenfunc();
 
-  var programmfpga = $scope.programfpga.split(' ');
-  var filefpga = programmfpga.shift();
-  programmfpga.push("0");
-  programmfpga.push("1");
-  const fpgaprogramreset = spawn(filefpga,programmfpga); 
+  fpgaseqfunc(); 
   
-  seqgen.stdout.on('data', (data) => {
-   // console.log(`stderr ${data}`);
-  });
-  
-  seqgen.stderr.on('data', (data) => {  
-    //console.log(`stdout ${data}`);
-    // see if the data line
-    if(data.includes("The CPU basecaller's instantenous speed for file")){
-      // split the string and get the value
-      var splitdata = data.toString().split(' ');
-      var value = splitdata[splitdata.length-2];
-      $scope.speed = value;
-      var cpuaveragetemp = ((cpuaverage*count)+parseFloat(value))/(count + 1);
-      cpuaverage = cpuaveragetemp;  
-      console.log(`stderr: ${cpuaverage} ${value}`);
-      
-      if(count < 100){
-        $scope.labels.push(count);
-        $scope.data[0].push(parseInt(value));
-        $scope.data[1].push(cpuaveragetemp);        
-        count++;
-      }else{
-        $scope.labels.shift();        
-        $scope.labels.push(count);
-        $scope.data[0].shift();
-        $scope.data[0].push(value);
-        
-        $scope.data[1].shift();
-        $scope.data[1].push(cpuaveragetemp);        
-        count++;
-      }
-      $scope.changeValue();
-      $scope.$apply();
-    }
-  });
-  
-  seqgen.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
-
-  
-  fpgaprogramreset.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-
-    var programmfpga1 = $scope.programfpga.split(' ');
-    programmfpga1.shift();
-    //2 0 0 512
-    programmfpga1.push("2");
-    programmfpga1.push("0");
-    programmfpga1.push("0");
-    programmfpga1.push("512");
-
-    const fpgaprogram = spawn(filefpga,programmfpga1); 
-  
-    fpgaprogram.stdout.on('data', (data) => {
-      // console.log(`stderr ${data}`);
-     });
-     
-     fpgaprogram.stderr.on('data', (data) => {  
-      // console.log(`stdout ${data}`);
-       // see if the data line
-       if(data.includes("The FPGA basecaller's instantenous speed for file")){
-         // split the string and get the value
-         var splitdata = data.toString().split(' ');
-         var value = splitdata[splitdata.length-2];
-         fpgaaverage = ((fpgaaverage*count1)+parseFloat(value))/(count1 + 1);
-   
-         //console.log(`stderr: ${value}`);
-         $scope.speed_fpga = value*4;
-         if(count1 < 100){
-           //$scope.labels.push(count);
-           //$scope.data.push(value);
-           $scope.data[2].push(value*4);
-           $scope.data[3].push(fpgaaverage*4);
-          
-           count1++;
-         }else{
-           //$scope.labels.shift();        
-           //$scope.labels.push(count);
-           $scope.data[2].shift();
-           $scope.data[2].push(value*4);
-           
-           $scope.data[3].shift();
-           $scope.data[3].push(fpgaaverage*4);
-   
-   
-           count1++;
-         }
-         $scope.changeValue();
-         $scope.$apply();
-       }
-     });
-     
-     fpgaprogram.on('close', (code) => {
-       console.log(`child process exited with code ${code}`);
-     });
-   
-  });
 
 
   
@@ -319,7 +365,6 @@ app.controller('InvoiceCtrl',function($scope,$userSettings){
 
   $scope.threshold = {
     '0': {color: 'green'},
-    '40': {color: 'orange'},
-    '75.5': {color: 'red'}
+    '40': {color: 'brown'}
   };
 });

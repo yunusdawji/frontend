@@ -279,7 +279,7 @@ function createWindow () {
     frame: true,
     resizable: true,
     show:false,
-    fullscreen:true
+    fullscreen:false
   });
   menu = Menu.buildFromTemplate(menuTemplate)
    Menu.setApplicationMenu(menu)
