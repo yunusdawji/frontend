@@ -51,7 +51,7 @@ function createViewerWindow () {
     frame: true,
     resizable: true,
     width: 1000,
-    height: 200,
+    height: 300,
     fullscreen: false
   });
 
@@ -282,7 +282,7 @@ function createWindow () {
     fullscreen:false
   });
   menu = Menu.buildFromTemplate(menuTemplate)
-   Menu.setApplicationMenu(menu)
+  Menu.setApplicationMenu(menu)
   //setupEmailing();
   /*ipc.on('start-invoicing', function (event) {
     menu.items[2].submenu.items[0].enabled = true;
@@ -306,7 +306,7 @@ function createWindow () {
   //mainWindow.show();
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

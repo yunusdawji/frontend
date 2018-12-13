@@ -75,6 +75,7 @@
     "angularjs-gauge": "^2.2.0",
     "asar": "^0.14.3",
     "chart.js": "^2.7.2",
-    "electron-packager-interactive": "0.0.7"
+    "electron-packager-interactive": "0.0.7",
+    "line-by-line": "^0.1.6"
   }
 }

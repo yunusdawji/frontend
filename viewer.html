@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>InvoiceTOP v1.0</title>
+    <title>File Options</title>
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
     <script type="text/javascript" src="js/vendor/angular.js"></script>
@@ -24,15 +24,26 @@
  
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
-    <div>
-      Seq Gen:
+    <div  class="row chart">
+      Output File Path:
       <input type="text" name="seqgen" ng-model="program" style='width:500px;' required>  
     </div>
-    <div>
-        Seq Gen FPGA:
-        <input type="text" name="seqgenfpga" ng-model="programfpga" style='width:500px;' required>  
-        <button ng-click="onClickSave()" >Save</button>
-      </div>
+    <div  class="row chart">
+        Input File 1:
+        <input type="text" name="seqgenfpga" ng-model="inputfile" style='width:500px;' required>  
+        
+    </div>
+    <div  class="row chart">
+      Input File 2:
+      <input type="text" name="inputfiletwo" ng-model="inputfiletwo" style='width:500px;' required>  
+      
+    </div>
+    <div  class="row chart">
+      Input File 2:
+      <input type="text" name="activesites" ng-model="activesites" style='width:500px;' required>  
+      
+    </div>
+    <div  class="row chart"><button ng-click="onClickSave()" >Save</button></div>
   </body>
 
 

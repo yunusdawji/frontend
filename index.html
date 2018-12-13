@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>DNA Basecaller</title>
+    <title>pHsycic Viewer</title>
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
     <script type="text/javascript" src="js/vendor/angular.js"></script>
@@ -24,32 +24,35 @@
  
 
   <body ng-app="invoiceapp" ng-controller="InvoiceCtrl" style="margin-top:25px; ">
-     
     <div class="container">
-      <div class="row guage_header">
-         <h1> <span class="package__name___dAyWc truncate flex-auto" title="pretty">DNA Basecaller</span></h1>
-
-      </div>
-    <div class="row guage_header">
-      <div  ng-model="speed" class="col-xs-6">
-          <h2>
-            <span class="package__name___dAyWc truncate flex-auto" title="pretty">CPU Speed</span></h2>
-        <ng-gauge id="speedmeter" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Kb/sec" thresholds="threshold" fraction-size="1"></ng-gauge>     
-<div ng-model="cputotal"><h4>Total Ecoli DNA: {{cputotal}}</h4></div>
-
-      </div>
-      <div  ng-model="speed_fpga" class="col-xs-6">
-          <h2>
-            <span class="package__name___dAyWc truncate flex-auto" title="pretty">FPGA Speed</span></h2>
-           <ng-gauge id="speedmeter_fpga" duration="100" size="200" type="arch" thick="10" min="0" max="160" value=speed_fpga  cap="round" label="Freq"  foreground-color="{{color}}" background-color="rgba(0, 0, 0, 0.1)" append="Kb/sec" thresholds="threshold" fraction-size="1"></ng-gauge> 
-<div ng-model="fpgatotal"><h4>Total EColi DNA: {{fpgatotal}}</h4></div>   
-      </div>
-    </div>
-    <div  class="row chart">
-        <canvas width="800" height="400" id="line" class="chart chart-line" chart-data="data"
+    <div  class="row chart" >
+      <div class="col-xs-6">
+        <canvas width="500" height="300" id="line" class="chart chart-line" chart-data="data"
 chart-labels="labels" chart-series="series" chart-options="options"
 chart-dataset-override="datasetOverride1" chart-click="onClick">
     </canvas>
+  </div>
+  <div class="col-xs-6">
+      <canvas width="500" height="300" id="line" class="chart chart-line" chart-data="data_act2"
+chart-labels="labels" chart-series="series_act2" chart-options="options"
+chart-dataset-override="datasetOverride1" chart-click="onClick">
+  </canvas>
+</div>
+    </div>
+    <div  class="row chart" >
+        <div class="col-xs-6">
+        <canvas width="500" height="300" id="line" class="chart chart-line" chart-data="data_act3"
+chart-labels="labels" chart-series="series_act3" chart-options="options"
+chart-dataset-override="datasetOverride1" chart-click="onClick">
+    </canvas>
+    </div>
+    <div class="col-xs-6">
+        <canvas width="500" height="300" id="line" class="chart chart-line" chart-data="data_act4"
+chart-labels="labels" chart-series="series_act4" chart-options="options"
+chart-dataset-override="datasetOverride1" chart-click="onClick">
+    </canvas>
+    </div>
+
     </div>
     <div class="row runbutton">
       <!-- Seq Gen:
